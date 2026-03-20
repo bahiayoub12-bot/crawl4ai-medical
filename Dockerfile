@@ -4,4 +4,4 @@ WORKDIR /app
 COPY . .
 RUN pip install crawl4ai fastapi uvicorn nest_asyncio
 RUN python3 -m playwright install chromium --with-deps
-CMD uvicorn main:app --host 0.0.0.0 --port $PORT
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
