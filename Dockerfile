@@ -1,6 +1,6 @@
-FROM mcr.microsoft.com/playwright/python:v1.58.0-jammy
+FROM python:3.11-slim
 WORKDIR /app
 COPY . .
-RUN pip install crawl4ai fastapi uvicorn nest_asyncio
+RUN pip install fastapi uvicorn httpx beautifulsoup4
 EXPOSE 8080
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

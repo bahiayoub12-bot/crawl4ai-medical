@@ -1,15 +1,18 @@
 from fastapi import FastAPI
-from crawl4ai import AsyncWebCrawler
-import asyncio
+import httpx
+from bs4 import BeautifulSoup
 
 app = FastAPI()
 
-@app.get("/crawl")
-async def crawl(url: str):
-    async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(url)
-        return {"content": result.markdown[:2000]}
-
 @app.get("/")
 def root():
-    return {"status": "Crawl4AI API is running!"}
+    return {"status": "Medical API is running!"}
+
+@app.get("/crawl")
+async def crawl(url: str):
+    headers = {"User-Agent": "Mozilla/5.0"}
+    async with httpx.AsyncClient() as client:
+        r = await client.get(url, headers=headers, timeout=30)
+        soup = BeautifulSoup(r.text, "html.parser")
+        text = soup.get_text()[:3000]
+        return {"content": text}
